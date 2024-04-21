@@ -54,16 +54,14 @@
         padding: 2px 12px;
         background-color: #5b2bcd;
         color: #fff;
-        font-size: 2rem;
+        font-size: 1rem;
       }
     </style>
   </head>
 
   <body>
     <div id="fb-root">
-      <button id="connectButton" onclick="connectToSolana()" class="btn">
-        Connect
-      </button>
+     
       <!-- <button onClick="javascript:getAccount()">Click me!</button> -->
     </div>
 
@@ -81,9 +79,13 @@
 
     <!-- The canvas must be inside a div called c2canvasdiv -->
     <div id="c2canvasdiv">
+	
       <!-- The canvas the project will render to.  If you change its ID, don't forget to change the
 		ID the runtime looks for in the jQuery events above (ready() and cr_sizeCanvas()). -->
       <canvas id="c2canvas" width="1920" height="1080">
+		<button id="connectButton" onclick="connectToSolana()" class="btn">
+			Connect
+		  </button>
         <!-- This text is displayed if the visitor's browser does not support HTML5.
 			You can change it, but it is a good idea to link to a description of a browser
 			and provide some links to download some popular HTML5-compatible browsers. -->
