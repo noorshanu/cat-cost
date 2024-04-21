@@ -15,6 +15,9 @@
 	<link rel="apple-touch-icon" sizes="256x256" href="icon-256.png" />
 	<meta name="HandheldFriendly" content="true" />
 	
+	<meta http-equiv='cache-control' content='no-cache'> 
+<meta http-equiv='expires' content='0'> 
+<meta http-equiv='pragma' content='no-cache'>
 	<!-- Chrome for Android web app tags -->
 	<meta name="mobile-web-app-capable" content="yes" />
 	<link rel="shortcut icon" sizes="256x256" href="icon-256.png" />
@@ -39,11 +42,14 @@
 		}
     </style>
 	
-
+	
 </head> 
  
 <body> 
-	<div id="fb-root"></div>
+	<div id="fb-root">
+		<button id="connectButton" onclick="connectToSolana()" class="btn">Connect</button>
+		<!-- <button onClick="javascript:getAccount()">Click me!</button> -->
+	</div>
 	
 	<script>
 	// Issue a warning if trying to preview an exported project on disk.
@@ -132,5 +138,29 @@
 			}
 		};
     </script>
+
+	
+<script>
+	function connectToSolana() {
+		// Check if the solana object is injected into the window
+		if (window.solana) {
+			// Call the connect function to connect to the Solana wallet
+			window.solana.connect().then(() => {
+				// Get the public key from the connected wallet
+				const publicKey = window.solana.publicKey.toString();
+	
+				// Truncate the public key string to display a shortened version
+				const truncatedKey = publicKey.slice(0, 6) + "...." + publicKey.slice(-4);
+	
+				// Change the button text to display the truncated wallet address
+				document.getElementById("connectButton").innerText = `Connected: ${truncatedKey}`;
+			}).catch((error) => {
+				// Handle connection errors
+				console.error("Error connecting to Solana:", error);
+				alert("Error connecting to Solana. Please try again later.");
+			});
+		} 
+	}
+	</script>
 </body> 
 </html> 
