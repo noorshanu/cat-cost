@@ -44,23 +44,78 @@
         -ms-touch-action: none;
       }
       .btn {
-        position: absolute;
+        /* position: absolute;
         top: 0;
-        left: 0;
+        left: 0; */
         z-index: 300;
         border: 1px solid;
         border-radius: 100px;
-        padding: 2px 12px;
+        padding: 6px 12px;
         background-color: #5b2bcd;
         color: #fff;
         font-size: 1rem;
+        width: 250px;
+        font-weight: 600;
+        margin: auto;
       }
+
+          /* Modal styles */
+          .modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+      .modal-content {
+        background-color: #fefefe;
+        margin: 20% auto;
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        color: #000;
+        border: 1px solid #888;
+        width: 80%;
+        max-width: 600px;
+        border-radius: 10px;
+      }
+      .close {
+     
+      }
+      .para{
+        font-size: larger;
+        font-weight:600 ;
+        text-align: center;
+      }
+      .close:hover,
+      .close:focus {
+        color: black;
+        text-decoration: none;
+        cursor: pointer;
+      }
+    </style>
     </style>
   </head>
 
   <body>
-    <button id="connectButton" onclick="connectToSolana()" class="btn">
-			Connect
+    <!-- Modal -->
+    <div id="myModal" class="modal">
+      <!-- Modal content -->
+      <div class="modal-content">
+       
+        <p class="para">Please connect to Solana to enter the website.</p>
+        <button id="connectButton" onclick="connectToSolana()" class="btn ">
+          Connect
+          </button>
+          <button class="close btn">Play without Wallet</button>
+      </div>
+    </div>
+    <button id="address" class="btn" style="display: none;">
+		Wallet Address
 		  </button>
     <div id="fb-root">
      
@@ -169,35 +224,64 @@
           OnRegisterSWError(e);
         }
       };
-    </script>
+     // Get the modal
+     var modal = document.getElementById("myModal");
 
-    <script>
-      function connectToSolana() {
-        // Check if the solana object is injected into the window
-        if (window.solana) {
-          // Call the connect function to connect to the Solana wallet
-          window.solana
-            .connect()
-            .then(() => {
-              // Get the public key from the connected wallet
-              const publicKey = window.solana.publicKey.toString();
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
 
-              // Truncate the public key string to display a shortened version
-              const truncatedKey =
-                publicKey.slice(0, 6) + "...." + publicKey.slice(-4);
+// When the page loads, show the modal
+window.onload = function () {
+  modal.style.display = "block";
+};
 
-              // Change the button text to display the truncated wallet address
-              document.getElementById(
-                "connectButton"
-              ).innerText = `Connected: ${truncatedKey}`;
-            })
-            .catch((error) => {
-              // Handle connection errors
-              console.error("Error connecting to Solana:", error);
-              alert("Error connecting to Solana. Please try again later.");
-            });
-        }
-      }
-    </script>
+// When the user clicks on <span> (x), close the modal
+span.onclick = function () {
+  modal.style.display = "none";
+};
+
+// When the user clicks anywhere outside of the modal, close it
+// window.onclick = function (event) {
+//   if (event.target == modal) {
+//     modal.style.display = "none";
+//   }
+// };
+</script>
+
+<script>
+  function connectToSolana() {
+    // Check if the solana object is injected into the window
+    if (window.solana) {
+      // Call the connect function to connect to the Solana wallet
+      window.solana
+        .connect()
+        .then(() => {
+          // Get the public key from the connected wallet
+          const publicKey = window.solana.publicKey.toString();
+
+          // Truncate the public key string to display a shortened version
+          const truncatedKey =
+            publicKey.slice(0, 6) + "...." + publicKey.slice(-4);
+
+          // Change the button text to display the truncated wallet address
+          document.getElementById(
+            "connectButton"
+          ).innerText = `Connected: ${truncatedKey}`;
+          
+          // Show the wallet address button
+          document.getElementById("address").style.display = "block";
+          document.getElementById("address").innerText = `Connected: ${truncatedKey}`;
+
+          // Close the modal after successful connection
+          modal.style.display = "none";
+        })
+        .catch((error) => {
+          // Handle connection errors
+          console.error("Error connecting to Solana:", error);
+          alert("Error connecting to Solana. Please try again later.");
+        });
+    }
+  }
+</script>
   </body>
 </html>
