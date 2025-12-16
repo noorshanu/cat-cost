@@ -3,7 +3,34 @@
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <title>Shiro Conquest</title>
+    <title>NoorAlam - Cat Conquest</title>
+
+    <!-- Basic SEO -->
+    <meta
+      name="description"
+      content="Got bored with my profile at NoorAlam.pro, so enjoy this little pixel cat game: Cat Conquest."
+    />
+    <meta name="author" content="Noor Alam" />
+    <link rel="canonical" href="https://www.nooralam.pro/" />
+
+    <!-- Open Graph / Social -->
+    <meta property="og:title" content="NoorAlam - Cat Conquest" />
+    <meta
+      property="og:description"
+      content="A tiny retro cat platformer to enjoy when you're bored of my profile."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://www.nooralam.pro/" />
+    <meta property="og:image" content="loading-logo.png" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="NoorAlam - Cat Conquest" />
+    <meta
+      name="twitter:description"
+      content="A tiny retro cat platformer to enjoy when you're bored of my profile."
+    />
+    <meta name="twitter:image" content="loading-logo.png" />
 
     <!-- Standardised web app manifest -->
     <link rel="manifest" href="appmanifest.json" />
@@ -243,19 +270,35 @@
       }
 
       // Runtime calls this global method when ready to start caching (i.e. after startup).
-      // This registers the service worker which caches resources for offline support.
+      // We override it to aggressively clear SW + caches on each load so users always get
+      // a fresh version when they open or refresh the tab.
       window.C2_RegisterSW = function C2_RegisterSW() {
-        if (!navigator.serviceWorker) return; // no SW support, ignore call
-
-        try {
+        // Unregister all existing service workers for this origin
+        if (navigator.serviceWorker && navigator.serviceWorker.getRegistrations) {
           navigator.serviceWorker
-            .register("sw.js", { scope: "./" })
-            .then(function (reg) {
-              console.log("Registered service worker on " + reg.scope);
+            .getRegistrations()
+            .then(function (registrations) {
+              registrations.forEach(function (reg) {
+                reg.unregister();
+              });
             })
             .catch(OnRegisterSWError);
-        } catch (e) {
-          OnRegisterSWError(e);
+        }
+
+        // Clear all caches (including Construct 2 offline caches) on each load
+        if (window.caches && caches.keys) {
+          caches
+            .keys()
+            .then(function (keys) {
+              return Promise.all(
+                keys.map(function (key) {
+                  return caches.delete(key);
+                })
+              );
+            })
+            .catch(function (e) {
+              console.warn("Failed to clear caches: ", e);
+            });
         }
       };
      // Get the modal
