@@ -43,24 +43,46 @@
         touch-action: none;
         -ms-touch-action: none;
       }
+      /* Pixel Game Style */
+      @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+      
       .btn {
-        /* position: absolute;
-        top: 0;
-        left: 0; */
         z-index: 300;
-        border: 1px solid;
-        border-radius: 100px;
-        padding: 6px 12px;
-        background-color: #5b2bcd;
+        border: 4px solid #000;
+        padding: 12px 24px;
+        background-color: #ff6b6b;
         color: #fff;
-        font-size: 1rem;
-        width: 250px;
-        font-weight: 600;
+        font-size: 16px;
+        font-family: 'Press Start 2P', monospace;
+        font-weight: normal;
+        width: auto;
+        min-width: 200px;
         margin: auto;
+        cursor: pointer;
+        text-transform: uppercase;
+        box-shadow: 
+          4px 4px 0px #000,
+          inset -2px -2px 0px rgba(0, 0, 0, 0.2);
+        image-rendering: pixelated;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: crisp-edges;
+        transition: all 0.1s;
+      }
+      
+      .btn:hover {
+        transform: translate(2px, 2px);
+        box-shadow: 
+          2px 2px 0px #000,
+          inset -2px -2px 0px rgba(0, 0, 0, 0.2);
+      }
+      
+      .btn:active {
+        transform: translate(4px, 4px);
+        box-shadow: none;
       }
 
-          /* Modal styles */
-          .modal {
+      /* Modal styles - Pixel Game Style */
+      .modal {
         display: none;
         position: fixed;
         z-index: 9999;
@@ -68,38 +90,55 @@
         top: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: rgba(0, 0, 0, 0.8);
       }
+      
       .modal-content {
-        background-color: #fefefe;
+        background: linear-gradient(135deg, #ffd93d 0%, #ff6b6b 100%);
         margin: 20% auto;
-        padding: 20px;
+        padding: 30px;
         display: flex;
         flex-direction: column;
-        gap: 10px;
+        gap: 20px;
         justify-content: center;
+        align-items: center;
         color: #000;
-        border: 1px solid #888;
+        border: 6px solid #000;
         width: 80%;
         max-width: 600px;
-        border-radius: 10px;
+        box-shadow: 
+          8px 8px 0px #000,
+          inset -4px -4px 0px rgba(0, 0, 0, 0.1);
+        image-rendering: pixelated;
+        image-rendering: -moz-crisp-edges;
+        image-rendering: crisp-edges;
       }
-      .close {
-     
-      }
-      .para{
-        font-size: larger;
-        font-weight:600 ;
+      
+      .para {
+        font-size: 18px;
+        font-family: 'Press Start 2P', monospace;
+        font-weight: normal;
         text-align: center;
-        padding: 10px;
+        padding: 20px;
+        line-height: 1.8;
+        color: #000;
+        text-shadow: 
+          2px 2px 0px #fff,
+          -1px -1px 0px rgba(0, 0, 0, 0.3);
+        word-spacing: 4px;
       }
+      
+      .close {
+        background-color: #4ecdc4;
+      }
+      
       .close:hover,
       .close:focus {
-        color: black;
+        background-color: #45b8b0;
+        color: #fff;
         text-decoration: none;
         cursor: pointer;
       }
-    </style>
     </style>
   </head>
 
@@ -108,17 +147,10 @@
     <div id="myModal" class="modal">
       <!-- Modal content -->
       <div class="modal-content">
-       
-        <p class="para">Please Connect Wallet to Start Playing Game.</p>
-        <button id="connectButton" onclick="connectToSolana()" class="btn ">
-          Connect
-          </button>
-          <button class="close btn">Play without Wallet</button>
+        <p class="para">got bored with my profile<br>enjoy this little game ❤️</p>
+        <button class="close btn">Start Playing</button>
       </div>
     </div>
-    <button id="address" class="btn" style="display: none;">
-		Wallet Address
-		  </button>
     <div id="fb-root">
      
       <!-- <button onClick="javascript:getAccount()">Click me!</button> -->
@@ -229,61 +261,18 @@
      // Get the modal
      var modal = document.getElementById("myModal");
 
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
+// Get the button element that closes the modal
+var closeBtn = document.getElementsByClassName("close")[0];
 
 // When the page loads, show the modal
 window.onload = function () {
   modal.style.display = "block";
 };
 
-// When the user clicks on <span> (x), close the modal
-span.onclick = function () {
+// When the user clicks the close button, close the modal
+closeBtn.onclick = function () {
   modal.style.display = "none";
 };
-
-// When the user clicks anywhere outside of the modal, close it
-// window.onclick = function (event) {
-//   if (event.target == modal) {
-//     modal.style.display = "none";
-//   }
-// };
-</script>
-
-<script>
-  function connectToSolana() {
-    // Check if the solana object is injected into the window
-    if (window.solana) {
-      // Call the connect function to connect to the Solana wallet
-      window.solana
-        .connect()
-        .then(() => {
-          // Get the public key from the connected wallet
-          const publicKey = window.solana.publicKey.toString();
-
-          // Truncate the public key string to display a shortened version
-          const truncatedKey =
-            publicKey.slice(0, 6) + "...." + publicKey.slice(-4);
-
-          // Change the button text to display the truncated wallet address
-          document.getElementById(
-            "connectButton"
-          ).innerText = `Connected: ${truncatedKey}`;
-          
-          // Show the wallet address button
-          document.getElementById("address").style.display = "block";
-          document.getElementById("address").innerText = `Connected: ${truncatedKey}`;
-
-          // Close the modal after successful connection
-          modal.style.display = "none";
-        })
-        .catch((error) => {
-          // Handle connection errors
-          console.error("Error connecting to Solana:", error);
-          alert("Error connecting to Solana. Please try again later.");
-        });
-    }
-  }
 </script>
   </body>
 </html>
